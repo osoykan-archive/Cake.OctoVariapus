@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
-    <VersionPrefix>1.0.2</VersionPrefix>
+    <TargetFramework>net45</TargetFramework>
+    <VersionPrefix>1.0.3</VersionPrefix>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <PackageIconUrl>https://codeopinion.com/wp-content/uploads/2016/08/cake.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/osoykan/Cake.OctoVariapus</PackageProjectUrl>
@@ -33,10 +33,9 @@
       <PackagePath>lib/net45/</PackagePath>
       <Pack>true</Pack>
     </Content>
-
-    <!--<Content Include="bin/Release/netstandard1.6/Newtonsoft.Json.dll">
-      <PackagePath>lib/netstandard1.6/</PackagePath>
+    <Content Include="bin/Release/net45/Octopus.Client.dll">
+      <PackagePath>lib/net45/</PackagePath>
       <Pack>true</Pack>
-    </Content>-->
+    </Content>
   </ItemGroup>
 </Project>
