@@ -9,5 +9,7 @@
         public bool IsSensitive { get; set; }
 
         public OctoScope Scope { get; set; }
+
+        public bool IsEditable { get; set; }
     }
 }

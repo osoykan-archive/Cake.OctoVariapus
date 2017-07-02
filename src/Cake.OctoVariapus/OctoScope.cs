@@ -4,8 +4,13 @@ namespace Cake.OctoVariapus
 {
     public class OctoScope
     {
-        public string ScopeName { get; set; }
+        public OctoScope()
+        {
+            Values = new List<string>();
+        }
 
-        public List<string> ScopeValues { get; set; }
+        public string Name { get; set; }
+
+        public List<string> Values { get; set; }
     }
 }

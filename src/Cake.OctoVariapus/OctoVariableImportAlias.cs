@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Cake.Core;
@@ -23,70 +24,97 @@ namespace Cake.OctoVariapus
         /// <param name="octopusProjectName">Name of the octopus project.</param>
         /// <param name="octopusApiKey">The octopus API key.</param>
         /// <param name="variables">The variables.</param>
-        public static async void ImportVariables(this ICakeContext context,
+        [CakeMethodAlias]
+        public static void ImportVariables(this ICakeContext context,
             string octopusServerEndpoint,
             string octopusProjectName,
             string octopusApiKey,
             IEnumerable<OctoVariable> variables)
         {
-            IOctopusAsyncClient client = await new OctopusClientFactory().CreateAsyncClient(new OctopusServerEndpoint(octopusServerEndpoint, octopusApiKey));
-            var octopus = new OctopusAsyncRepository(client);
-
-            // Find the project that owns the variables we want to edit
-            ProjectResource project = await octopus.Projects.FindByName(octopusProjectName);
-
-            // Get the variables for editing
-            VariableSetResource variableSet = await octopus.VariableSets.Get(project.Link("Variables"));
-
-            foreach (OctoVariable variable in variables)
+            try
             {
-                variableSet.Variables.Add(new VariableResource
+                IOctopusAsyncClient client = new OctopusClientFactory().CreateAsyncClient(new OctopusServerEndpoint(octopusServerEndpoint, octopusApiKey)).Result;
+                var octopus = new OctopusAsyncRepository(client);
+
+                ProjectResource project = octopus.Projects.FindByName(octopusProjectName).Result;
+
+                VariableSetResource variableSet = octopus.VariableSets.Get(project.Link("Variables")).Result;
+
+                foreach (OctoVariable variable in variables)
                 {
-                    Name = variable.Name,
-                    Value = variable.Value,
-                    IsSensitive = variable.IsSensitive,
-                    Type = variable.IsSensitive ? VariableType.Sensitive : VariableType.String,
-                    Scope = CreateScopeSpesification(variable),
-                    IsEditable = true
-                });
+                    variableSet.Variables.Add(new VariableResource
+                    {
+                        Name = variable.Name,
+                        Value = variable.Value,
+                        IsSensitive = variable.IsSensitive,
+                        Type = variable.IsSensitive ? VariableType.Sensitive : VariableType.String,
+                        Scope = CreateScopeSpesification(variable, variableSet),
+                        IsEditable = variable.IsEditable
+                    });
+                }
+
+                octopus.VariableSets.Modify(variableSet).Wait();
+            }
+            catch (Exception exception)
+            {
+                throw new CakeException(exception.Message, exception.InnerException);
+            }
+        }
+
+        private static ScopeSpecification CreateScopeSpesification(OctoVariable variable, VariableSetResource variableSet)
+        {
+            ScopeField scopeName = FindScopeName(variable.Scope);
+
+            List<ReferenceDataItem> referenceDataItems = FindScopeValue(scopeName, variableSet);
+
+            List<string> scopeValues = referenceDataItems.Join(variable.Scope.Values,
+                                                             refDataItem => refDataItem.Name,
+                                                             selectedScope => selectedScope,
+                                                             (item, s) => item.Id)
+                                                         .ToList();
+
+            var value = new ScopeValue(scopeValues.First(), scopeValues.Skip(1).ToArray());
+
+            return new ScopeSpecification { { scopeName, value } };
+        }
+
+        private static List<ReferenceDataItem> FindScopeValue(ScopeField scopeField, VariableSetResource variableSet)
+        {
+            List<ReferenceDataItem> referenceDataItem;
+            switch (scopeField)
+            {
+                case ScopeField.Environment:
+                    referenceDataItem = variableSet.ScopeValues.Environments;
+                    break;
+                case ScopeField.Role:
+                    referenceDataItem = variableSet.ScopeValues.Channels;
+                    break;
+                case ScopeField.TargetRole:
+                    referenceDataItem = variableSet.ScopeValues.Machines;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(scopeField));
             }
 
-            // Add a new variable
-
-            // Save the variables
-            await octopus.VariableSets.Modify(variableSet);
+            return referenceDataItem;
         }
 
-        private static ScopeSpecification CreateScopeSpesification(OctoVariable variable)
+        private static ScopeField FindScopeName(OctoScope variableScope)
         {
-            return new ScopeSpecification
-            {
-                {
-                    FindScopeField(variable.Scope),
-                    new ScopeValue(variable.Scope.ScopeValues.First(),
-                        variable.Scope.ScopeValues.Skip(1).ToArray()
-                    )
-                }
-            };
-        }
-
-        private static ScopeField FindScopeField(OctoScope variableScope)
-        {
-            var scopeField = ScopeField.Environment;
-            switch (variableScope.ScopeName)
+            ScopeField scopeField;
+            switch (variableScope.Name)
             {
                 case "Environment":
                     scopeField = ScopeField.Environment;
                     break;
-                case "Action":
+                case "Role":
                     scopeField = ScopeField.Action;
                     break;
-                case "Channel":
+                case "TargetRole":
                     scopeField = ScopeField.Channel;
                     break;
-                case "Machine":
-                    scopeField = ScopeField.Machine;
-                    break;
+                default:
+                    throw new ArgumentException("There is no proper ScopeField for this variable import operation.");
             }
 
             return scopeField;
