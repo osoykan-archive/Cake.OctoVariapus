@@ -6,6 +6,7 @@
 #addin "Cake.FileHelpers"
 #addin "nuget:?package=NuGet.Core"
 #addin "nuget:?package=Cake.ExtendedNuGet"
+#addin "nuget:?package=Cake.OctoVariapus"
 
 using NuGet;
 
@@ -77,6 +78,13 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
     {
+        ImportVariables(
+            "http://localhost",
+            "Cake.OctoVariapus",
+            "API-FZNNNTXZK0NWFHLLMYJL4JGFIU",
+            "variables.json"
+        );
+
         // foreach(var testProject in testProjectNames)
         // {
         //    var testFile = GetFiles($"**/bin/{configuration}/{targetTestFramework}/{testProject}*.dll").First();

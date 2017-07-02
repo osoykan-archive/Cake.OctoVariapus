@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.0.2</VersionPrefix>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <PackageIconUrl>https://codeopinion.com/wp-content/uploads/2016/08/cake.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/osoykan/Cake.OctoVariapus</PackageProjectUrl>
@@ -19,6 +19,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <PackProject>true</PackProject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,4 +28,15 @@
     <PackageReference Include="Octopus.Client" Version="4.18.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="bin/Release/net45/Newtonsoft.Json.dll">
+      <PackagePath>lib/net45/</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    
+    <Content Include="bin/Release/netstandard1.6/Newtonsoft.Json.dll">
+      <PackagePath>lib/netstandard1.6/</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
 </Project>
