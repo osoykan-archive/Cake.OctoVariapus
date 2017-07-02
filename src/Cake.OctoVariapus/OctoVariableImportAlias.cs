@@ -59,10 +59,10 @@ namespace Cake.OctoVariapus
 
                     string scopeNames = string.Join(",", variable.Scope.Values.Select(x => x));
 
-                    VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name);
+                    VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name && x.Scope.Equals(newVariable.Scope));
                     if (existingVariable != null)
                     {
-                        context.Log.Information($"There was already Variable: ({variable.Name}), Scopes:({scopeNames}) in octopus, trying to update...");
+                        context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) already exists in octopus, trying to update...");
 
                         variableSet.AddOrUpdateVariableValue(existingVariable.Name, newVariable.Value, newVariable.Scope, newVariable.IsSensitive);
 
