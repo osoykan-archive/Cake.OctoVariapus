@@ -5,7 +5,7 @@ Cake integration for Octopus variable management
 ```csharp
 #addin nuget:?package=Cake.OctoVariapus
 ```
-
+## Usage
 ```csharp
 ImportVariables(octopusUrl,
                 octoProjectName,
