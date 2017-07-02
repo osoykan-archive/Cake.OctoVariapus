@@ -5,6 +5,7 @@ using System.Linq;
 
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 using Newtonsoft.Json;
@@ -56,18 +57,30 @@ namespace Cake.OctoVariapus
                         IsEditable = variable.IsEditable
                     };
 
+                    context.Log.Information($"Variable -> ({variable.Name}) started to add or update...");
+
                     VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name);
                     if (existingVariable != null)
                     {
+                        context.Log.Information($"There is already -> ({variable.Name}) variable in octopus, trying to update...");
+
                         variableSet.AddOrUpdateVariableValue(existingVariable.Name, newVariable.Value, newVariable.Scope, newVariable.IsSensitive);
+
+                        context.Log.Information($"Variable -> ({variable.Name}) updated successfully...");
                     }
                     else
                     {
+                        context.Log.Information($"New variable -> ({variable.Name}) detected, trying to add...");
+
                         variableSet.Variables.Add(newVariable);
+
+                        context.Log.Information($"New variable -> ({variable.Name}) added successfully...");
                     }
                 }
 
                 octopus.VariableSets.Modify(variableSet).Wait();
+
+                context.Log.Information($"Variables are all successfully set.");
             }
             catch (Exception exception)
             {

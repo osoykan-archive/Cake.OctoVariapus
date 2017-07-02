@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-    <VersionPrefix>1.0.4</VersionPrefix>
+    <VersionPrefix>1.0.5</VersionPrefix>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <PackageIconUrl>https://codeopinion.com/wp-content/uploads/2016/08/cake.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/osoykan/Cake.OctoVariapus</PackageProjectUrl>
