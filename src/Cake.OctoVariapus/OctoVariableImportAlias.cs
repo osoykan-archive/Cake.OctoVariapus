@@ -57,24 +57,24 @@ namespace Cake.OctoVariapus
                         IsEditable = variable.IsEditable
                     };
 
-                    context.Log.Information($"Variable -> ({variable.Name}) started to add or update...");
+                    string scopeNames = string.Join(",", variable.Scope.Values.Select(x => x));
 
                     VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name);
                     if (existingVariable != null)
                     {
-                        context.Log.Information($"There is already -> ({variable.Name}) variable in octopus, trying to update...");
+                        context.Log.Information($"There was already Variable: ({variable.Name}), Scopes:({scopeNames}) in octopus, trying to update...");
 
                         variableSet.AddOrUpdateVariableValue(existingVariable.Name, newVariable.Value, newVariable.Scope, newVariable.IsSensitive);
 
-                        context.Log.Information($"Variable -> ({variable.Name}) updated successfully...");
+                        context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) updated successfully...");
                     }
                     else
                     {
-                        context.Log.Information($"New variable -> ({variable.Name}) detected, trying to add...");
+                        context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) detected, trying to add...");
 
                         variableSet.Variables.Add(newVariable);
 
-                        context.Log.Information($"New variable -> ({variable.Name}) added successfully...");
+                        context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) added successfully...");
                     }
                 }
 
