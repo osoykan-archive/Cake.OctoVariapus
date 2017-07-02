@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.IO;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 using Octopus.Client;
 using Octopus.Client.Model;
@@ -39,7 +44,7 @@ namespace Cake.OctoVariapus
                 ProjectResource project = octopus.Projects.FindByName(octopusProjectName).Result;
 
                 VariableSetResource variableSet = octopus.VariableSets.Get(project.Link("Variables")).Result;
-
+               
                 foreach (OctoVariable variable in variables)
                 {
                     var newVariable = new VariableResource
@@ -69,6 +74,26 @@ namespace Cake.OctoVariapus
             {
                 throw new CakeException(exception.Message, exception.InnerException);
             }
+        }
+
+        /// <summary>
+        ///     Imports the variables from a json file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="octopusServerEndpoint">The octopus server endpoint.</param>
+        /// <param name="octopusProjectName">Name of the octopus project.</param>
+        /// <param name="octopusApiKey">The octopus API key.</param>
+        /// <param name="jsonVariableFilePath">The json variable file path.</param>
+        public static void ImportVariables(this ICakeContext context,
+            string octopusServerEndpoint,
+            string octopusProjectName,
+            string octopusApiKey,
+            FilePath jsonVariableFilePath)
+        {
+            string jsonString = File.ReadAllText(jsonVariableFilePath.FullPath);
+            var variables = JsonConvert.DeserializeObject<List<OctoVariable>>(jsonString);
+
+            context.ImportVariables(octopusServerEndpoint, octopusProjectName, octopusApiKey, variables);
         }
 
         private static ScopeSpecification CreateScopeSpesification(OctoVariable variable, VariableSetResource variableSet)

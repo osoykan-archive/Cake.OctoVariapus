@@ -13,7 +13,7 @@ namespace Cake.OctoVariapus.Tests
     public class CakeOctoVariapus_Tests
     {
         [Fact]
-        public void should_work()
+        public void import_with_handwritten_list_should_work()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -37,14 +37,39 @@ namespace Cake.OctoVariapus.Tests
                         Name = "ConnectionString",
                         IsSensitive = false,
                         IsEditable = true,
-                        Value = "DataSource:localhost2",
+                        Value = "DataSource:localhost25",
                         Scope = new OctoScope
                         {
                             Name = "Environment",
-                            Values = new List<string>(){ "Development" }
+                            Values = new List<string> { "Development", "Stage" }
                         }
                     }
                 });
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+        }
+
+        [Fact]
+        public void import_from_a_json_file_should_work()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            var octoVaribleImportAlias = new CakeOctoVariableImportAliasFixture(0);
+            const string octopusUrl = "http://localhost";
+            const string octoProjectName = "Cake.OctoVariapus";
+            const string octoApiKey = "API-FZNNNTXZK0NWFHLLMYJL4JGFIU";
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+
+            octoVaribleImportAlias.CakeContext.ImportVariables(octopusUrl,
+                octoProjectName,
+                octoApiKey,
+                "variables.json");
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert

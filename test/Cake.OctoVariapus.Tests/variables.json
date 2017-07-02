@@ -1,0 +1,52 @@
+﻿[
+  {
+    "Name": "ProductApiEndPoint",
+    "Value": "http://www.developmentProductApi.com",
+    "IsSensitive": false,
+    "Scope": {
+      "Name": "Environment",
+      "Values": [
+        "Development"
+      ]
+    },
+    "IsEditable": true
+  },
+  {
+    "Name": "ProductApiEndPoint",
+    "Value": "http://www.stageProductApi.com",
+    "IsSensitive": false,
+    "Scope": {
+      "Name": "Environment",
+      "Values": [
+        "Stage"
+      ]
+    },
+    "IsEditable": true
+  },
+  {
+    "Name": "ProductApiEndPoint",
+    "Value": "http://www.productionProductApi.com",
+    "IsSensitive": false,
+    "Scope": {
+      "Name": "Environment",
+      "Values": [
+        "Production"
+      ]
+    },
+    "IsEditable": true
+  },
+  {
+    "Name": "ConnectionIsSfae",
+    "Value": "true",
+    "IsSensitive": false,
+    "Scope": {
+      "Name": "Environment",
+      "Values": [
+        "Development",
+        "Stage",
+        "Production"
+      ]
+    },
+    "IsEditable": true
+  }
+]

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -12,14 +12,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="variables.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="*.json" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+  </ItemGroup>
+ 
+  <ItemGroup>
     <PackageReference Include="Cake.Core" Version="0.20.0" />
     <PackageReference Include="FakeItEasy" Version="3.4.2" />
     <PackageReference Include="FluentAssertions" Version="4.19.2" />
+    <PackageReference Include="HttpMock" Version="2.1.0" />
     <PackageReference Include="xunit" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Cake.OctoVariapus\Cake.OctoVariapus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="variables.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
