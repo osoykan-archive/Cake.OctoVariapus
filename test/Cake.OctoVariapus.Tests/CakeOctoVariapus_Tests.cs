@@ -37,7 +37,7 @@ namespace Cake.OctoVariapus.Tests
                         Name = "ConnectionString",
                         IsSensitive = false,
                         IsEditable = true,
-                        Value = "DataSource:localhost",
+                        Value = "DataSource:localhost2",
                         Scope = new OctoScope
                         {
                             Name = "Environment",

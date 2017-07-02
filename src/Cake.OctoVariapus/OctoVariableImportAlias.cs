@@ -42,7 +42,7 @@ namespace Cake.OctoVariapus
 
                 foreach (OctoVariable variable in variables)
                 {
-                    variableSet.Variables.Add(new VariableResource
+                    var newVariable = new VariableResource
                     {
                         Name = variable.Name,
                         Value = variable.Value,
@@ -50,7 +50,17 @@ namespace Cake.OctoVariapus
                         Type = variable.IsSensitive ? VariableType.Sensitive : VariableType.String,
                         Scope = CreateScopeSpesification(variable, variableSet),
                         IsEditable = variable.IsEditable
-                    });
+                    };
+
+                    VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name);
+                    if (existingVariable != null)
+                    {
+                        variableSet.AddOrUpdateVariableValue(existingVariable.Name, newVariable.Value, newVariable.Scope, newVariable.IsSensitive);
+                    }
+                    else
+                    {
+                        variableSet.Variables.Add(newVariable);
+                    }
                 }
 
                 octopus.VariableSets.Modify(variableSet).Wait();
