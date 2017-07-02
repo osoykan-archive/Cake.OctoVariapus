@@ -1,4 +1,4 @@
-# Cake.OctoVariapus
+# Cake.OctoVariapus [![Build status](https://ci.appveyor.com/api/projects/status/5q1klj3re9ebpuj3?svg=true)](https://ci.appveyor.com/project/osoykan/cake-octovariapus)
 
 Cake integration for Octopus variable management
 
