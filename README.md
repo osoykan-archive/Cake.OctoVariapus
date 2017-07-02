@@ -10,7 +10,7 @@ Cake integration for Octopus variable management
 ### Passing Collection
 
 ```csharp
-ImportVariables(octopusUrl,
+OctoImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
                 new List<OctoVariable>
@@ -88,7 +88,7 @@ ImportVariables(octopusUrl,
 Execution:
 
 ```csharp
-ImportVariables(octopusUrl,
+OctoImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
                 "variables.json")
