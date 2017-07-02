@@ -6,6 +6,9 @@ Cake integration for Octopus variable management
 #addin nuget:?package=Cake.OctoVariapus
 ```
 ## Usage
+
+### Passing Collection
+
 ```csharp
 ImportVariables(octopusUrl,
                 octoProjectName,
@@ -25,4 +28,67 @@ ImportVariables(octopusUrl,
                         }
                     }
                 })
+```
+### With Json File
+
+```json
+[
+  {
+    "Name": "ProductApiEndPoint",
+    "Value": "http://www.developmentProductApi.com",
+    "IsSensitive": false,
+    "Scope": {
+      "Name": "Environment",
+      "Values": [
+        "Development"
+      ]
+    },
+    "IsEditable": true
+  },
+  {
+    "Name": "ProductApiEndPoint",
+    "Value": "http://www.stageProductApi.com",
+    "IsSensitive": false,
+    "Scope": {
+      "Name": "Environment",
+      "Values": [
+        "Stage"
+      ]
+    },
+    "IsEditable": true
+  },
+  {
+    "Name": "ProductApiEndPoint",
+    "Value": "http://www.productionProductApi.com",
+    "IsSensitive": false,
+    "Scope": {
+      "Name": "Environment",
+      "Values": [
+        "Production"
+      ]
+    },
+    "IsEditable": true
+  },
+  {
+    "Name": "ConnectionIsSfae",
+    "Value": "true",
+    "IsSensitive": false,
+    "Scope": {
+      "Name": "Environment",
+      "Values": [
+        "Development",
+        "Stage",
+        "Production"
+      ]
+    },
+    "IsEditable": true
+  }
+]
+```
+
+```csharp
+ImportVariables(octopusUrl,
+                octoProjectName,
+                octoApiKey,
+                "variables.json")
 ```
