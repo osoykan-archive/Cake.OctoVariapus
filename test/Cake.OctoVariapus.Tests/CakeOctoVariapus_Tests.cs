@@ -29,7 +29,7 @@ namespace Cake.OctoVariapus.Tests
             // Act
             //-----------------------------------------------------------------------------------------------------------
             //HttpMockRepository.At("http://localhost/api/variables/variableset-Projects-1");
-            octoVaribleImportAlias.CakeContext.ImportVariables(octopusUrl,
+            octoVaribleImportAlias.CakeContext.OctoImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
                 new List<OctoVariable>
@@ -69,7 +69,7 @@ namespace Cake.OctoVariapus.Tests
             // Act
             //-----------------------------------------------------------------------------------------------------------
 
-            octoVaribleImportAlias.CakeContext.ImportVariables(octopusUrl,
+            octoVaribleImportAlias.CakeContext.OctoImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
                 "variables.json");

@@ -29,7 +29,7 @@ namespace Cake.OctoVariapus
         /// <param name="octopusApiKey">The octopus API key.</param>
         /// <param name="variables">The variables.</param>
         [CakeMethodAlias]
-        public static void ImportVariables(this ICakeContext context,
+        public static void OctoImportVariables(this ICakeContext context,
             string octopusServerEndpoint,
             string octopusProjectName,
             string octopusApiKey,
@@ -84,7 +84,7 @@ namespace Cake.OctoVariapus
         /// <param name="octopusApiKey">The octopus API key.</param>
         /// <param name="jsonVariableFilePath">The json variable file path.</param>
         [CakeMethodAlias]
-        public static void ImportVariables(this ICakeContext context,
+        public static void OctoImportVariables(this ICakeContext context,
             string octopusServerEndpoint,
             string octopusProjectName,
             string octopusApiKey,
@@ -93,7 +93,7 @@ namespace Cake.OctoVariapus
             string jsonString = File.ReadAllText(jsonVariableFilePath.FullPath);
             var variables = JsonConvert.DeserializeObject<List<OctoVariable>>(jsonString);
 
-            context.ImportVariables(octopusServerEndpoint, octopusProjectName, octopusApiKey, variables);
+            context.OctoImportVariables(octopusServerEndpoint, octopusProjectName, octopusApiKey, variables);
         }
 
         private static ScopeSpecification CreateScopeSpesification(OctoVariable variable, VariableSetResource variableSet)
