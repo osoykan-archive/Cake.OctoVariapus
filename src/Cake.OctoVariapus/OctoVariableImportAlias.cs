@@ -8,7 +8,6 @@ using Cake.Core.Annotations;
 using Cake.Core.IO;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 using Octopus.Client;
 using Octopus.Client.Model;
@@ -44,7 +43,7 @@ namespace Cake.OctoVariapus
                 ProjectResource project = octopus.Projects.FindByName(octopusProjectName).Result;
 
                 VariableSetResource variableSet = octopus.VariableSets.Get(project.Link("Variables")).Result;
-               
+
                 foreach (OctoVariable variable in variables)
                 {
                     var newVariable = new VariableResource
@@ -84,6 +83,7 @@ namespace Cake.OctoVariapus
         /// <param name="octopusProjectName">Name of the octopus project.</param>
         /// <param name="octopusApiKey">The octopus API key.</param>
         /// <param name="jsonVariableFilePath">The json variable file path.</param>
+        [CakeMethodAlias]
         public static void ImportVariables(this ICakeContext context,
             string octopusServerEndpoint,
             string octopusProjectName,
