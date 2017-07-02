@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E922420A-F873-4290-B5AD-F37574F16A2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{67BF7F03-A8D7-4E04-A32B-A7E7C0BC510E}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		build.cake = build.cake
+		build.ps1 = build.ps1
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{AFC42151-A521-4E67-836F-7368D6A741D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.OctoVariapus", "src\Cake.OctoVariapus\Cake.OctoVariapus.csproj", "{00E978A7-5A42-454E-9612-377CD9C5E4D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.OctoVariapus.Tests", "test\Cake.OctoVariapus.Tests\Cake.OctoVariapus.Tests.csproj", "{302592FA-79E6-4903-BE4F-A2C745068AEC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{00E978A7-5A42-454E-9612-377CD9C5E4D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00E978A7-5A42-454E-9612-377CD9C5E4D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00E978A7-5A42-454E-9612-377CD9C5E4D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00E978A7-5A42-454E-9612-377CD9C5E4D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{302592FA-79E6-4903-BE4F-A2C745068AEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{302592FA-79E6-4903-BE4F-A2C745068AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{302592FA-79E6-4903-BE4F-A2C745068AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{302592FA-79E6-4903-BE4F-A2C745068AEC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00E978A7-5A42-454E-9612-377CD9C5E4D1} = {E922420A-F873-4290-B5AD-F37574F16A2D}
+		{302592FA-79E6-4903-BE4F-A2C745068AEC} = {AFC42151-A521-4E67-836F-7368D6A741D8}
+	EndGlobalSection
+EndGlobal

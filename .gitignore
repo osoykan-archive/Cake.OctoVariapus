@@ -286,3 +286,12 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+.dotnet/
+nupkg/
+tools/
+*.ncrunchproject
+*.v3.ncrunchproject
+*.v3.ncrunchsolution
+*.ncrunchsolution
+
