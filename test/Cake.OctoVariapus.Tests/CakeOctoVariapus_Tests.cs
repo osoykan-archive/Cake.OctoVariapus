@@ -6,6 +6,8 @@ using Cake.Core.IO;
 
 using FakeItEasy;
 
+using HttpMock;
+
 using Xunit;
 
 namespace Cake.OctoVariapus.Tests
@@ -26,7 +28,7 @@ namespace Cake.OctoVariapus.Tests
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-
+            //HttpMockRepository.At("http://localhost/api/variables/variableset-Projects-1");
             octoVaribleImportAlias.CakeContext.ImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
@@ -61,6 +63,7 @@ namespace Cake.OctoVariapus.Tests
             const string octopusUrl = "http://localhost";
             const string octoProjectName = "Cake.OctoVariapus";
             const string octoApiKey = "API-FZNNNTXZK0NWFHLLMYJL4JGFIU";
+            //HttpMockRepository.At("http://localhost/api/variables/variableset-Projects-1");
 
             //-----------------------------------------------------------------------------------------------------------
             // Act
