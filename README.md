@@ -1,6 +1,4 @@
-# ![Cake](https://raw.githubusercontent.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png) Cake.OctoVariapus [![Build status](https://ci.appveyor.com/api/projects/status/5q1klj3re9ebpuj3?svg=true)](https://ci.appveyor.com/project/osoykan/cake-octovariapus)
-![Cake](https://raw.githubusercontent.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png)
-  
+# ![Cake](https://raw.githubusercontent.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png) Cake.OctoVariapus [![Build status](https://ci.appveyor.com/api/projects/status/5q1klj3re9ebpuj3?svg=true)](https://ci.appveyor.com/project/osoykan/cake-octovariapus)  
 
 Cake integration for Octopus variable management
 
