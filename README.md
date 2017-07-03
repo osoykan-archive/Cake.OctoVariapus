@@ -92,5 +92,5 @@ Execution:
 OctoImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
-                "variables.json")
+                "./variables.json")
 ```
