@@ -6,6 +6,8 @@ using Cake.Core.IO;
 
 using FakeItEasy;
 
+using FluentAssertions;
+
 using HttpMock;
 
 using Xunit;
@@ -28,7 +30,7 @@ namespace Cake.OctoVariapus.Tests
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            //HttpMockRepository.At("http://localhost/api/variables/variableset-Projects-1");
+            HttpMockRepository.At("http://localhost/api/variables/variableset-Projects-1");
             octoVaribleImportAlias.CakeContext.OctoImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
@@ -51,6 +53,7 @@ namespace Cake.OctoVariapus.Tests
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
+            octoVaribleImportAlias.GetCakeLog.Messages.Count.Should().BeGreaterThan(0);
         }
 
         [Fact]
@@ -63,7 +66,6 @@ namespace Cake.OctoVariapus.Tests
             const string octopusUrl = "http://localhost";
             const string octoProjectName = "Cake.OctoVariapus";
             const string octoApiKey = "API-FZNNNTXZK0NWFHLLMYJL4JGFIU";
-            //HttpMockRepository.At("http://localhost/api/variables/variableset-Projects-1");
 
             //-----------------------------------------------------------------------------------------------------------
             // Act
@@ -77,6 +79,7 @@ namespace Cake.OctoVariapus.Tests
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
+            octoVaribleImportAlias.GetCakeLog.Messages.Count.Should().BeGreaterThan(0);
         }
 
         private class CakeOctoVariableImportAliasFixture

@@ -15,6 +15,7 @@ namespace Cake.OctoVariapus.Tests
 
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
+            Messages.Add(new MessageWrapper(verbosity, level, format, args));
         }
 
         public Verbosity Verbosity { get; set; }
