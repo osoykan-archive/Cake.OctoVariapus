@@ -1,4 +1,6 @@
-﻿namespace Cake.OctoVariapus
+﻿using System.Collections.Generic;
+
+namespace Cake.OctoVariapus
 {
     public class OctoVariable
     {
@@ -8,8 +10,8 @@
 
         public bool IsSensitive { get; set; }
 
-        public OctoScope Scope { get; set; }
-
         public bool IsEditable { get; set; }
+
+        public List<OctoScope> Scopes { get; set; }
     }
 }

@@ -3,50 +3,76 @@
     "Name": "ProductApiEndPoint",
     "Value": "http://www.developmentProductApi.com",
     "IsSensitive": false,
-    "Scope": {
-      "Name": "Environment",
-      "Values": [
-        "Development"
-      ]
-    },
-    "IsEditable": true
+    "IsEditable": true,
+    "Scopes": [
+      {
+        "Name": "Environment",
+        "Values": [
+          "Development"
+        ]
+      }
+    ]
   },
   {
     "Name": "ProductApiEndPoint",
     "Value": "http://www.stageProductApi.com",
     "IsSensitive": false,
-    "Scope": {
-      "Name": "Environment",
-      "Values": [
-        "Stage"
-      ]
-    },
-    "IsEditable": true
+    "IsEditable": true,
+    "Scopes": [
+      {
+        "Name": "Environment",
+        "Values": [
+          "Stage"
+        ]
+      }
+    ]
   },
   {
     "Name": "ProductApiEndPoint",
     "Value": "http://www.productionProductApi.com",
     "IsSensitive": false,
-    "Scope": {
-      "Name": "Environment",
-      "Values": [
-        "Production"
-      ]
-    },
-    "IsEditable": true
+    "IsEditable": true,
+    "Scopes": [
+      {
+        "Name": "Environment",
+        "Values": [
+          "Production"
+        ]
+      }
+    ]
   },
   {
     "Name": "ConnectionIsSfae",
     "Value": "true",
     "IsSensitive": false,
-    "Scope": {
-      "Name": "Environment",
-      "Values": [
-        "Development",
-        "Stage",
-        "Production"
-      ]
-    },
-    "IsEditable": true
+    "IsEditable": true,
+    "Scopes": [
+      {
+        "Name": "Environment",
+        "Values": [
+          "Development",
+          "Stage",
+          "Production"
+        ]
+      },
+      {
+        "Name": "Role",
+        "Values": [
+          "Development"
+        ]
+      },
+      {
+        "Name": "Target",
+        "Values": [
+          "Oguzhan's Machine Group"
+        ]
+      },
+      {
+        "Name": "Step",
+        "Values": [
+          "1. Initial"
+        ]
+      }
+    ]
   }
 ]

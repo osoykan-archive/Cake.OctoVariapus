@@ -23,7 +23,7 @@ namespace Cake.OctoVariapus.Tests
             // Arrange
             //-----------------------------------------------------------------------------------------------------------
             var octoVaribleImportAlias = new CakeOctoVariableImportAliasFixture(0);
-            const string octopusUrl = "http://localhost";
+            const string octopusUrl = "http://local.octopus.com";
             const string octoProjectName = "Cake.OctoVariapus";
             const string octoApiKey = "API-FZNNNTXZK0NWFHLLMYJL4JGFIU";
 
@@ -42,10 +42,18 @@ namespace Cake.OctoVariapus.Tests
                         IsSensitive = false,
                         IsEditable = true,
                         Value = "DataSource:localhost25",
-                        Scope = new OctoScope
+                        Scopes = new List<OctoScope>
                         {
-                            Name = "Environment",
-                            Values = new List<string> { "Development", "Stage" }
+                            new OctoScope
+                            {
+                                Name = "Environment",
+                                Values = new List<string> { "Development", "Stage" }
+                            },
+                            new OctoScope
+                            {
+                                Name = "Role",
+                                Values = new List<string> { "Development" }
+                            }
                         }
                     }
                 });
@@ -63,7 +71,7 @@ namespace Cake.OctoVariapus.Tests
             // Arrange
             //-----------------------------------------------------------------------------------------------------------
             var octoVaribleImportAlias = new CakeOctoVariableImportAliasFixture(0);
-            const string octopusUrl = "http://localhost";
+            const string octopusUrl = "http://local.octopus.com";
             const string octoProjectName = "Cake.OctoVariapus";
             const string octoApiKey = "API-FZNNNTXZK0NWFHLLMYJL4JGFIU";
 

@@ -53,11 +53,12 @@ namespace Cake.OctoVariapus
                         Value = variable.Value,
                         IsSensitive = variable.IsSensitive,
                         Type = variable.IsSensitive ? VariableType.Sensitive : VariableType.String,
-                        Scope = CreateScopeSpesification(variable, variableSet),
                         IsEditable = variable.IsEditable
                     };
 
-                    string scopeNames = string.Join(",", variable.Scope.Values.Select(x => x));
+                    newVariable.Scope = CreateScopeSpesification(variable, variableSet);
+
+                    string scopeNames = CreateScopeInformationsForLogging(variable);
 
                     VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name && x.Scope.Equals(newVariable.Scope));
                     if (existingVariable != null)
@@ -73,12 +74,13 @@ namespace Cake.OctoVariapus
                         context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) detected, trying to add...");
 
                         variableSet.Variables.Add(newVariable);
-
+                        
                         context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) added successfully...");
                     }
                 }
 
                 octopus.VariableSets.Modify(variableSet).Wait();
+                octopus.VariableSets.Refresh(variableSet).Wait();
 
                 context.Log.Information($"Variables are all successfully set.");
             }
@@ -86,6 +88,16 @@ namespace Cake.OctoVariapus
             {
                 throw new CakeException(exception.Message, exception.InnerException);
             }
+        }
+
+        private static string CreateScopeInformationsForLogging(OctoVariable variable)
+        {
+            List<string> scopeInformation = variable.Scopes
+                                                    .SelectMany(x => x.Values, (scope, c) => $"{scope.Name}({string.Join(", ", scope.Values)})")
+                                                    .Distinct()
+                                                    .ToList();
+
+            return string.Join(", ", scopeInformation);
         }
 
         /// <summary>
@@ -111,19 +123,26 @@ namespace Cake.OctoVariapus
 
         private static ScopeSpecification CreateScopeSpesification(OctoVariable variable, VariableSetResource variableSet)
         {
-            ScopeField scopeName = FindScopeName(variable.Scope);
+            var scopeSpecifiaciton = new ScopeSpecification();
 
-            List<ReferenceDataItem> referenceDataItems = FindScopeValue(scopeName, variableSet);
+            variable.Scopes.ForEach(scope =>
+            {
+                ScopeField scopeName = FindScopeName(scope);
 
-            List<string> scopeValues = referenceDataItems.Join(variable.Scope.Values,
-                                                             refDataItem => refDataItem.Name,
-                                                             selectedScope => selectedScope,
-                                                             (item, s) => item.Id)
-                                                         .ToList();
+                List<ReferenceDataItem> referenceDataItems = FindScopeValue(scopeName, variableSet);
 
-            var value = new ScopeValue(scopeValues.First(), scopeValues.Skip(1).ToArray());
+                List<string> scopeValues = referenceDataItems.Join(scope.Values,
+                                                                 refDataItem => refDataItem.Name,
+                                                                 selectedScope => selectedScope,
+                                                                 (item, s) => item.Id)
+                                                             .ToList();
 
-            return new ScopeSpecification { { scopeName, value } };
+                var value = new ScopeValue(scopeValues.First(), scopeValues.Skip(1).ToArray());
+
+                scopeSpecifiaciton.Add(scopeName, value);
+            });
+
+            return scopeSpecifiaciton;
         }
 
         private static List<ReferenceDataItem> FindScopeValue(ScopeField scopeField, VariableSetResource variableSet)
@@ -135,10 +154,13 @@ namespace Cake.OctoVariapus
                     referenceDataItem = variableSet.ScopeValues.Environments;
                     break;
                 case ScopeField.Role:
-                    referenceDataItem = variableSet.ScopeValues.Channels;
+                    referenceDataItem = variableSet.ScopeValues.Roles;
                     break;
                 case ScopeField.TargetRole:
                     referenceDataItem = variableSet.ScopeValues.Machines;
+                    break;
+                case ScopeField.Action:
+                    referenceDataItem = variableSet.ScopeValues.Actions;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(scopeField));
@@ -156,10 +178,13 @@ namespace Cake.OctoVariapus
                     scopeField = ScopeField.Environment;
                     break;
                 case "Role":
-                    scopeField = ScopeField.Action;
+                    scopeField = ScopeField.Role;
                     break;
-                case "TargetRole":
-                    scopeField = ScopeField.Channel;
+                case "Target":
+                    scopeField = ScopeField.TargetRole;
+                    break;
+                case "Step":
+                    scopeField = ScopeField.Action;
                     break;
                 default:
                     throw new ArgumentException("There is no proper ScopeField for this variable import operation.");
