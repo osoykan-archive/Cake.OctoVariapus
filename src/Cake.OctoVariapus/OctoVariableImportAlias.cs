@@ -156,7 +156,7 @@ namespace Cake.OctoVariapus
                 case ScopeField.Role:
                     referenceDataItem = variableSet.ScopeValues.Roles;
                     break;
-                case ScopeField.TargetRole:
+                case ScopeField.Machine:
                     referenceDataItem = variableSet.ScopeValues.Machines;
                     break;
                 case ScopeField.Action:
@@ -180,8 +180,8 @@ namespace Cake.OctoVariapus
                 case "Role":
                     scopeField = ScopeField.Role;
                     break;
-                case "Target":
-                    scopeField = ScopeField.TargetRole;
+                case "Machine":
+                    scopeField = ScopeField.Machine;
                     break;
                 case "Step":
                     scopeField = ScopeField.Action;
