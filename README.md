@@ -14,21 +14,29 @@ Cake integration for Octopus variable management
 OctoImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
-                new List<OctoVariable>
-                {
-                    new OctoVariable
-                    {
-                        Name = "ConnectionString",
-                        IsSensitive = false,
-                        IsEditable = true,
-                        Value = "DataSource:localhost25",
-                        Scope = new OctoScope
+                new List<OctoScope>
                         {
-                            Name = "Environment",
-                            Values = new List<string> { "Development", "Stage" }
-                        }
-                    }
-                })
+                            new OctoScope
+                            {
+                                Name = "Environment",
+                                Values = new List<string> { "Development", "Stage" }
+                            },
+                            new OctoScope
+                            {
+                                Name = "Role",
+                                Values = new List<string> { "Development" }
+                            },
+                            new OctoScope
+                            {
+                                Name = "Machine",
+                                Values = new List<string> { "Oguzhan's Machine Group" }
+                            },
+                            new OctoScope
+                            {
+                                Name = "Step",
+                                Values = new List<string> { "1. Initial" }
+                            }
+                        })
 ```
 ### With Json File
 
@@ -38,51 +46,77 @@ OctoImportVariables(octopusUrl,
     "Name": "ProductApiEndPoint",
     "Value": "http://www.developmentProductApi.com",
     "IsSensitive": false,
-    "Scope": {
-      "Name": "Environment",
-      "Values": [
-        "Development"
-      ]
-    },
-    "IsEditable": true
+    "IsEditable": true,
+    "Scopes": [
+      {
+        "Name": "Environment",
+        "Values": [
+          "Development"
+        ]
+      }
+    ]
   },
   {
     "Name": "ProductApiEndPoint",
     "Value": "http://www.stageProductApi.com",
     "IsSensitive": false,
-    "Scope": {
-      "Name": "Environment",
-      "Values": [
-        "Stage"
-      ]
-    },
-    "IsEditable": true
+    "IsEditable": true,
+    "Scopes": [
+      {
+        "Name": "Environment",
+        "Values": [
+          "Stage"
+        ]
+      }
+    ]
   },
   {
     "Name": "ProductApiEndPoint",
     "Value": "http://www.productionProductApi.com",
     "IsSensitive": false,
-    "Scope": {
-      "Name": "Environment",
-      "Values": [
-        "Production"
-      ]
-    },
-    "IsEditable": true
+    "IsEditable": true,
+    "Scopes": [
+      {
+        "Name": "Environment",
+        "Values": [
+          "Production"
+        ]
+      }
+    ]
   },
   {
-    "Name": "ConnectionIsSfae",
+    "Name": "ConnectionIsSafe",
     "Value": "true",
     "IsSensitive": false,
-    "Scope": {
-      "Name": "Environment",
-      "Values": [
-        "Development",
-        "Stage",
-        "Production"
-      ]
-    },
-    "IsEditable": true
+    "IsEditable": true,
+    "Scopes": [
+      {
+        "Name": "Environment",
+        "Values": [
+          "Development",
+          "Stage",
+          "Production"
+        ]
+      },
+      {
+        "Name": "Role",
+        "Values": [
+          "Development"
+        ]
+      },
+      {
+        "Name": "Machine",
+        "Values": [
+          "Oguzhan's Machine Group"
+        ]
+      },
+      {
+        "Name": "Step",
+        "Values": [
+          "1. Initial"
+        ]
+      }
+    ]
   }
 ]
 ```
