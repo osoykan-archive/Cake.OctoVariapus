@@ -3,7 +3,6 @@
 #tool "nuget:?package=NuGet.CommandLine"
 
 #addin "Cake.FileHelpers"
-#addin "Cake.OctoVariapus"
 #addin "nuget:?package=NuGet.Core"
 #addin "nuget:?package=Cake.ExtendedNuGet"
 
