@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
-    <VersionPrefix>1.1.1</VersionPrefix>
+    <VersionPrefix>1.1.2</VersionPrefix>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <PackageIconUrl>https://raw.githubusercontent.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/osoykan/Cake.OctoVariapus</PackageProjectUrl>
@@ -27,4 +27,16 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Octopus.Client" Version="4.18.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin/Release/net45/Newtonsoft.Json.dll">
+      <PackagePath>lib/net45/</PackagePath>
+      <Pack>true</Pack>
+    </None>
+    <None Include="bin/Release/net45/Octopus.Client.dll">
+      <PackagePath>lib/net45/</PackagePath>
+      <Pack>true</Pack>
+    </None>
+  </ItemGroup>
+
 </Project>
