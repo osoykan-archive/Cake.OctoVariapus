@@ -74,7 +74,7 @@ namespace Cake.OctoVariapus
                         context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) detected, trying to add...");
 
                         variableSet.Variables.Add(newVariable);
-                        
+
                         context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) added successfully...");
                     }
                 }
@@ -137,6 +137,11 @@ namespace Cake.OctoVariapus
                                                                  (item, s) => item.Id)
                                                              .ToList();
 
+                if (!scopeValues.Any())
+                {
+                    throw new CakeException($"({string.Join(",", scope.Values)}) value(s) can not be found on ({scope.Name}) scope.");
+                }
+
                 var value = new ScopeValue(scopeValues.First(), scopeValues.Skip(1).ToArray());
 
                 scopeSpecifiaciton.Add(scopeName, value);
@@ -187,7 +192,7 @@ namespace Cake.OctoVariapus
                     scopeField = ScopeField.Action;
                     break;
                 default:
-                    throw new ArgumentException("There is no proper ScopeField for this variable import operation.");
+                    throw new ArgumentException($"There is no proper ScopeField for ({variableScope.Name}) variable import operation.");
             }
 
             return scopeField;
