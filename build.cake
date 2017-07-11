@@ -2,8 +2,8 @@
 #tool "nuget:?package=xunit.runner.console"
 #tool "nuget:?package=NuGet.CommandLine"
 
-#addin "Cake.Json"
 #addin "Cake.FileHelpers"
+#addin "Cake.OctoVariapus"
 #addin "nuget:?package=NuGet.Core"
 #addin "nuget:?package=Cake.ExtendedNuGet"
 

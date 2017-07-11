@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;net46</TargetFrameworks>
-    <VersionPrefix>1.1.0</VersionPrefix>
+    <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
+    <VersionPrefix>1.1.1</VersionPrefix>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <PackageIconUrl>https://raw.githubusercontent.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/osoykan/Cake.OctoVariapus</PackageProjectUrl>
