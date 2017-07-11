@@ -42,7 +42,7 @@
     ]
   },
   {
-    "Name": "ConnectionIsSfae",
+    "Name": "ConnectionIsSafe",
     "Value": "true",
     "IsSensitive": false,
     "IsEditable": true,
