@@ -14,7 +14,15 @@ Cake integration for Octopus variable management
 OctoImportVariables(octopusUrl,
                 octoProjectName,
                 octoApiKey,
-                new List<OctoScope>
+                new List<OctoVariable>
+                {
+                    new OctoVariable
+                    {
+                        Name = "ConnectionString",
+                        IsSensitive = false,
+                        IsEditable = true,
+                        Value = "DataSource:localhost25",
+                        Scopes = new List<OctoScope>
                         {
                             new OctoScope
                             {
@@ -25,18 +33,10 @@ OctoImportVariables(octopusUrl,
                             {
                                 Name = "Role",
                                 Values = new List<string> { "Development" }
-                            },
-                            new OctoScope
-                            {
-                                Name = "Machine",
-                                Values = new List<string> { "Oguzhan's Machine Group" }
-                            },
-                            new OctoScope
-                            {
-                                Name = "Step",
-                                Values = new List<string> { "1. Initial" }
                             }
-                        })
+                        }
+                    }
+                })
 ```
 ### With Json File
 
