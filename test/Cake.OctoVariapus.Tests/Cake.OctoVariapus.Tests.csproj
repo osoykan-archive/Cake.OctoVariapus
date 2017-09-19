@@ -22,9 +22,9 @@
   </ItemGroup>
  
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.20.0" />
-    <PackageReference Include="FakeItEasy" Version="3.4.2" />
-    <PackageReference Include="FluentAssertions" Version="4.19.2" />
+    <PackageReference Include="Cake.Core" Version="0.22.0" />
+    <PackageReference Include="FakeItEasy" Version="4.0.0" />
+    <PackageReference Include="FluentAssertions" Version="4.19.4" />
     <PackageReference Include="HttpMock" Version="2.1.0" />
     <PackageReference Include="xunit" Version="2.2.0" />
   </ItemGroup>

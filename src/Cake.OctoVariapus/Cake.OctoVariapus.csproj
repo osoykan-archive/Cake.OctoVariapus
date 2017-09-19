@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
-    <VersionPrefix>1.1.3</VersionPrefix>
+    <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
+    <VersionPrefix>1.1.4</VersionPrefix>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <PackageIconUrl>https://raw.githubusercontent.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/osoykan/Cake.OctoVariapus</PackageProjectUrl>
@@ -23,18 +23,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.20.0" />
+    <PackageReference Include="Cake.Core" Version="0.22.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Octopus.Client" Version="4.18.0" />
+    <PackageReference Include="Octopus.Client" Version="4.22.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="bin/Release/net45/Newtonsoft.Json.dll">
-      <PackagePath>lib/net45/</PackagePath>
+    <None Include="bin/Release/net46/Newtonsoft.Json.dll">
+      <PackagePath>lib/net46/</PackagePath>
       <Pack>true</Pack>
     </None>
-    <None Include="bin/Release/net45/Octopus.Client.dll">
-      <PackagePath>lib/net45/</PackagePath>
+    <None Include="bin/Release/net46/Octopus.Client.dll">
+      <PackagePath>lib/net46/</PackagePath>
       <Pack>true</Pack>
     </None>
   </ItemGroup>
