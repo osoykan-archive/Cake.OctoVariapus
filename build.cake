@@ -1,7 +1,9 @@
 #tool "nuget:?package=xunit.runner.console"
 
+#addin "nuget:?package=Cake.Nuget"
 #addin "nuget:?package=NuGet.Core"
 #addin "nuget:?package=Cake.ExtendedNuGet"
+
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -25,7 +27,7 @@ var testProjectNames = new List<string>()
 
 var nupkgPath = "nupkg";
 var nupkgRegex = $"**/{projectName}*.nupkg";
-var nugetPath = toolpath + "/NuGet.CommandLine/tools/nuget.exe";
+var nugetPath = toolpath + "/nuget.exe";
 var nugetQueryUrl = "https://www.nuget.org/api/v2/";
 var nugetPushUrl = "https://www.nuget.org/api/v2/package";
 var NUGET_PUSH_SETTINGS = new NuGetPushSettings

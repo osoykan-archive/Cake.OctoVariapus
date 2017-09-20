@@ -16,7 +16,7 @@ No tasks will be executed.
 .PARAMETER ScriptArgs
 Remaining arguments are added here.
 .LINK
-http://cakebuild.net
+https://cakebuild.net
 #>
 
 [CmdletBinding()]
@@ -36,6 +36,10 @@ $DotNetChannel = "LTS";
 $DotNetVersion = "2.0.0";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
 $NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+
+# Temporarily skip verification and opt-in to new in-proc NuGet
+$ENV:CAKE_SETTINGS_SKIPVERIFICATION='true'
+$ENV:CAKE_NUGET_USEINPROCESSCLIENT='true'
 
 # Make sure tools folder exists
 $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
@@ -82,9 +86,10 @@ if($FoundDotNetCliVersion -ne $DotNetVersion) {
 
     Remove-PathVariable "$InstallPath"
     $env:PATH = "$InstallPath;$env:PATH"
-    $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-    $env:DOTNET_CLI_TELEMETRY_OPTOUT=1
 }
+
+$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+$env:DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 ###########################################################################
 # INSTALL NUGET
