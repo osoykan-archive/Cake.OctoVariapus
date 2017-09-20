@@ -1,12 +1,7 @@
-#tool "nuget:?package=Cake.CoreCLR";
 #tool "nuget:?package=xunit.runner.console"
-#tool "nuget:?package=NuGet.CommandLine"
 
-#addin "Cake.FileHelpers"
 #addin "nuget:?package=NuGet.Core"
 #addin "nuget:?package=Cake.ExtendedNuGet"
-
-using NuGet;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
