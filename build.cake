@@ -18,7 +18,7 @@ var toolpath = Argument("toolpath", @"tools");
 var branch = Argument("branch", EnvironmentVariable("APPVEYOR_REPO_BRANCH"));
 var nugetApiKey = EnvironmentVariable("nugetApiKey");
 
-var targetTestFramework = "netcoreapp1.0";
+var targetTestFramework = "net46";
 var testFileRegex = $"**/bin/{configuration}/{targetTestFramework}/*Tests*.dll";
 var testProjectNames = new List<string>()
                       {
