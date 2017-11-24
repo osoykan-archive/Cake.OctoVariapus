@@ -45,6 +45,12 @@ namespace Cake.OctoVariapus
 
                 VariableSetResource variableSet = octopus.VariableSets.Get(project.Link("Variables")).Result;
 
+                List<VariableResource> sensitiveVariables = variableSet.Variables.Where(variable => variable.IsSensitive).ToList();
+
+                variableSet.Variables.Clear();
+
+                sensitiveVariables.ForEach(sensitiveVariable => { variableSet.Variables.Add(sensitiveVariable); });
+
                 foreach (OctoVariable variable in variables)
                 {
                     var newVariable = new VariableResource
@@ -60,23 +66,11 @@ namespace Cake.OctoVariapus
 
                     string scopeNames = CreateScopeInformationsForLogging(variable);
 
-                    VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name && x.Scope.Equals(newVariable.Scope));
-                    if (existingVariable != null)
-                    {
-                        context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) already exists in octopus, trying to update...");
+                    context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) adding...");
 
-                        variableSet.AddOrUpdateVariableValue(existingVariable.Name, newVariable.Value, newVariable.Scope, newVariable.IsSensitive);
+                    variableSet.Variables.Add(newVariable);
 
-                        context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) updated successfully...");
-                    }
-                    else
-                    {
-                        context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) detected, trying to add...");
-
-                        variableSet.Variables.Add(newVariable);
-
-                        context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) added successfully...");
-                    }
+                    context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) added successfully...");
                 }
 
                 octopus.VariableSets.Modify(variableSet).Wait();
