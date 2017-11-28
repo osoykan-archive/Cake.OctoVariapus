@@ -29,12 +29,14 @@ namespace Cake.OctoVariapus
         /// <param name="octopusProjectName">Name of the octopus project.</param>
         /// <param name="octopusApiKey">The octopus API key.</param>
         /// <param name="variables">The variables.</param>
+        /// <param name="clearVariables">Clear all nonsensitive variables before adding variables.</param>
         [CakeMethodAlias]
         public static void OctoImportVariables(this ICakeContext context,
             string octopusServerEndpoint,
             string octopusProjectName,
             string octopusApiKey,
-            IEnumerable<OctoVariable> variables)
+            IEnumerable<OctoVariable> variables,
+            bool clearVariables = false)
         {
             try
             {
@@ -45,11 +47,14 @@ namespace Cake.OctoVariapus
 
                 VariableSetResource variableSet = octopus.VariableSets.Get(project.Link("Variables")).Result;
 
-                List<VariableResource> sensitiveVariables = variableSet.Variables.Where(variable => variable.IsSensitive).ToList();
+                if (clearVariables)
+                {
+                    List<VariableResource> sensitiveVariables = variableSet.Variables.Where(variable => variable.IsSensitive).ToList();
 
-                variableSet.Variables.Clear();
+                    variableSet.Variables.Clear();
 
-                sensitiveVariables.ForEach(sensitiveVariable => { variableSet.Variables.Add(sensitiveVariable); });
+                    sensitiveVariables.ForEach(sensitiveVariable => { variableSet.Variables.Add(sensitiveVariable); });
+                }
 
                 foreach (OctoVariable variable in variables)
                 {
@@ -66,11 +71,23 @@ namespace Cake.OctoVariapus
 
                     string scopeNames = CreateScopeInformationsForLogging(variable);
 
-                    context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) adding...");
+                    VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name && x.Scope.Equals(newVariable.Scope));
+                    if (existingVariable != null)
+                    {
+                        context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) already exists in octopus, trying to update...");
 
-                    variableSet.Variables.Add(newVariable);
+                        variableSet.AddOrUpdateVariableValue(existingVariable.Name, newVariable.Value, newVariable.Scope, newVariable.IsSensitive);
 
-                    context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) added successfully...");
+                        context.Log.Information($"Variable: ({variable.Name}), Scopes:({scopeNames}) updated successfully...");
+                    }
+                    else
+                    {
+                        context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) detected, trying to add...");
+
+                        variableSet.Variables.Add(newVariable);
+
+                        context.Log.Information($"New Variable: ({variable.Name}), Scopes:({scopeNames}) added successfully...");
+                    }
                 }
 
                 octopus.VariableSets.Modify(variableSet).Wait();
