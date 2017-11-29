@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Cake.Core;
-using Cake.Core.IO;
-
-using FakeItEasy;
+﻿using System.Collections.Generic;
 
 using FluentAssertions;
 
@@ -16,6 +10,12 @@ namespace Cake.OctoVariapus.Tests
 {
     public class CakeOctoVariapus_Tests
     {
+        private const string OctopusUrl = "http://local.octopus.com";
+
+        private const string OctoProjectName = "Cake.OctoVariapus";
+
+        private const string OctoApiKey = "API-OW0PLJT3JLSZXFCRBE0EKQ7KU9I";
+
         [Fact]
         public void import_with_handwritten_list_should_work()
         {
@@ -23,17 +23,14 @@ namespace Cake.OctoVariapus.Tests
             // Arrange
             //-----------------------------------------------------------------------------------------------------------
             var octoVaribleImportAlias = new CakeOctoVariableImportAliasFixture(0);
-            const string octopusUrl = "http://local.octopus.com";
-            const string octoProjectName = "Cake.OctoVariapus";
-            const string octoApiKey = "API-FZNNNTXZK0NWFHLLMYJL4JGFIU";
 
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
             HttpMockRepository.At("http://localhost/api/variables/variableset-Projects-1");
-            octoVaribleImportAlias.CakeContext.OctoImportVariables(octopusUrl,
-                octoProjectName,
-                octoApiKey,
+            octoVaribleImportAlias.CakeContext.OctoImportVariables(OctopusUrl,
+                OctoProjectName,
+                OctoApiKey,
                 new List<OctoVariable>
                 {
                     new OctoVariable
@@ -48,15 +45,65 @@ namespace Cake.OctoVariapus.Tests
                             {
                                 Name = "Environment",
                                 Values = new List<string> { "Development", "Stage" }
-                            },
-                            new OctoScope
-                            {
-                                Name = "Role",
-                                Values = new List<string> { "Development" }
                             }
                         }
                     }
                 });
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            octoVaribleImportAlias.GetCakeLog.Messages.Count.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public void clear_nonsensitive_variables_should_work()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            var octoVaribleImportAlias = new CakeOctoVariableImportAliasFixture(0);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            HttpMockRepository.At("http://localhost/api/variables/variableset-Projects-1");
+            octoVaribleImportAlias.CakeContext.OctoImportVariables(OctopusUrl,
+                OctoProjectName,
+                OctoApiKey,
+                new List<OctoVariable>
+                {
+                    new OctoVariable
+                    {
+                        Name = "Username",
+                        IsSensitive = false,
+                        IsEditable = true,
+                        Value = "user",
+                        Scopes = new List<OctoScope>
+                        {
+                            new OctoScope
+                            {
+                                Name = "Environment",
+                                Values = new List<string> { "Development", "Stage" }
+                            }
+                        }
+                    },
+                    new OctoVariable
+                    {
+                        Name = "Password",
+                        IsSensitive = true,
+                        IsEditable = true,
+                        Value = "123456",
+                        Scopes = new List<OctoScope>
+                        {
+                            new OctoScope
+                            {
+                                Name = "Environment",
+                                Values = new List<string> { "Development", "Stage" }
+                            }
+                        }
+                    }
+                }, true);
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -71,54 +118,16 @@ namespace Cake.OctoVariapus.Tests
             // Arrange
             //-----------------------------------------------------------------------------------------------------------
             var octoVaribleImportAlias = new CakeOctoVariableImportAliasFixture(0);
-            const string octopusUrl = "http://local.octopus.com";
-            const string octoProjectName = "Cake.OctoVariapus";
-            const string octoApiKey = "API-FZNNNTXZK0NWFHLLMYJL4JGFIU";
 
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-
-            octoVaribleImportAlias.CakeContext.OctoImportVariables(octopusUrl,
-                octoProjectName,
-                octoApiKey,
-                "variables.json");
+            octoVaribleImportAlias.CakeContext.OctoImportVariables(OctopusUrl, OctoProjectName, OctoApiKey, "variables.json");
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
             octoVaribleImportAlias.GetCakeLog.Messages.Count.Should().BeGreaterThan(0);
-        }
-
-        private class CakeOctoVariableImportAliasFixture
-        {
-            public CakeOctoVariableImportAliasFixture(int exitCode)
-            {
-                GetDirectoryPath = Guid.NewGuid().ToString();
-
-                A.CallTo(() => CakeContext.ProcessRunner).Returns(ProcessRunner);
-                A.CallTo(() => CakeContext.FileSystem).Returns(FileSystem);
-                A.CallTo(() => CakeContext.Log).Returns(GetCakeLog);
-                A.CallTo(() => ProcessRunner.Start(A<FilePath>._, A<ProcessSettings>._)).Returns(Process);
-                A.CallTo(() => Process.GetExitCode()).Returns(exitCode);
-            }
-
-            public CakeOctoVariableImportAliasFixture()
-                : this(0)
-            {
-            }
-
-            public ICakeContext CakeContext { get; } = A.Fake<ICakeContext>();
-
-            public IFileSystem FileSystem { get; } = A.Fake<IFileSystem>();
-
-            public DirectoryPath GetDirectoryPath { get; }
-
-            public IProcess Process { get; } = A.Fake<IProcess>();
-
-            public IProcessRunner ProcessRunner { get; } = A.Fake<IProcessRunner>();
-
-            public CakeLogFixture GetCakeLog { get; } = new CakeLogFixture();
         }
     }
 }
