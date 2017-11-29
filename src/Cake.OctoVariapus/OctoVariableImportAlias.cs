@@ -29,14 +29,14 @@ namespace Cake.OctoVariapus
         /// <param name="octopusProjectName">Name of the octopus project.</param>
         /// <param name="octopusApiKey">The octopus API key.</param>
         /// <param name="variables">The variables.</param>
-        /// <param name="clearVariables">Clear all nonsensitive variables before adding variables.</param>
+        /// <param name="clearAllNonSensitiveExistingVariables">Clear all nonsensitive variables before adding variables.</param>
         [CakeMethodAlias]
         public static void OctoImportVariables(this ICakeContext context,
             string octopusServerEndpoint,
             string octopusProjectName,
             string octopusApiKey,
             IEnumerable<OctoVariable> variables,
-            bool clearVariables = false)
+            bool clearAllNonSensitiveExistingVariables = false)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Cake.OctoVariapus
 
                 VariableSetResource variableSet = octopus.VariableSets.Get(project.Link("Variables")).Result;
 
-                if (clearVariables)
+                if (clearAllNonSensitiveExistingVariables)
                 {
                     List<VariableResource> sensitiveVariables = variableSet.Variables.Where(variable => variable.IsSensitive).ToList();
 
@@ -64,11 +64,10 @@ namespace Cake.OctoVariapus
                         Value = variable.Value,
                         IsSensitive = variable.IsSensitive,
                         Type = variable.IsSensitive ? VariableType.Sensitive : VariableType.String,
-                        IsEditable = variable.IsEditable
+                        IsEditable = variable.IsEditable,
+                        Scope = CreateScopeSpesification(variable, variableSet)
                     };
-
-                    newVariable.Scope = CreateScopeSpesification(variable, variableSet);
-
+                    
                     string scopeNames = CreateScopeInformationsForLogging(variable);
 
                     VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name && x.Scope.Equals(newVariable.Scope));
@@ -119,12 +118,14 @@ namespace Cake.OctoVariapus
         /// <param name="octopusProjectName">Name of the octopus project.</param>
         /// <param name="octopusApiKey">The octopus API key.</param>
         /// <param name="jsonVariableFilePath">The json variable file path.</param>
+        /// <param name="clearAllNonSensitiveExistingVariables"></param>
         [CakeMethodAlias]
         public static void OctoImportVariables(this ICakeContext context,
             string octopusServerEndpoint,
             string octopusProjectName,
             string octopusApiKey,
-            FilePath jsonVariableFilePath)
+            FilePath jsonVariableFilePath,
+            bool clearAllNonSensitiveExistingVariables = false)
         {
             string jsonString = File.ReadAllText(jsonVariableFilePath.FullPath);
             var variables = JsonConvert.DeserializeObject<List<OctoVariable>>(jsonString);
@@ -143,15 +144,12 @@ namespace Cake.OctoVariapus
                 List<ReferenceDataItem> referenceDataItems = FindScopeValue(scopeName, variableSet);
 
                 List<string> scopeValues = referenceDataItems.Join(scope.Values,
-                                                                 refDataItem => refDataItem.Name,
-                                                                 selectedScope => selectedScope,
-                                                                 (item, s) => item.Id)
+                    refDataItem => refDataItem.Name,
+                    selectedScope => selectedScope,
+                    (item, s) => item.Id)
                                                              .ToList();
 
-                if (!scopeValues.Any())
-                {
-                    throw new CakeException($"({string.Join(",", scope.Values)}) value(s) can not be found on ({scope.Name}) scope.");
-                }
+                if (!scopeValues.Any()) throw new CakeException($"({string.Join(",", scope.Values)}) value(s) can not be found on ({scope.Name}) scope.");
 
                 var value = new ScopeValue(scopeValues.First(), scopeValues.Skip(1).ToArray());
 
