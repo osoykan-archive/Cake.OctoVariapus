@@ -134,7 +134,7 @@ namespace Cake.OctoVariapus
             string jsonString = File.ReadAllText(jsonVariableFilePath.FullPath);
             var variables = JsonConvert.DeserializeObject<List<OctoVariable>>(jsonString);
 
-            context.OctoImportVariables(octopusServerEndpoint, octopusProjectName, octopusApiKey, variables);
+            context.OctoImportVariables(octopusServerEndpoint, octopusProjectName, octopusApiKey, variables, clearAllNonSensitiveExistingVariables);
         }
 
         private static ScopeSpecification CreateScopeSpesification(OctoVariable variable, VariableSetResource variableSet)
