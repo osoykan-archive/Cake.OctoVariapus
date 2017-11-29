@@ -49,11 +49,15 @@ namespace Cake.OctoVariapus
 
                 if (clearAllNonSensitiveExistingVariables)
                 {
+                    context.Log.Information($"Deleting all nonsensitive variables...");
+
                     List<VariableResource> sensitiveVariables = variableSet.Variables.Where(variable => variable.IsSensitive).ToList();
 
                     variableSet.Variables.Clear();
 
                     sensitiveVariables.ForEach(sensitiveVariable => { variableSet.Variables.Add(sensitiveVariable); });
+
+                    context.Log.Information($"Deleting operation finished.");
                 }
 
                 foreach (OctoVariable variable in variables)
@@ -67,7 +71,7 @@ namespace Cake.OctoVariapus
                         IsEditable = variable.IsEditable,
                         Scope = CreateScopeSpesification(variable, variableSet)
                     };
-                    
+
                     string scopeNames = CreateScopeInformationsForLogging(variable);
 
                     VariableResource existingVariable = variableSet.Variables.FirstOrDefault(x => x.Name == variable.Name && x.Scope.Equals(newVariable.Scope));
