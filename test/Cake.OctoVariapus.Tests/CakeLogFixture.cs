@@ -2,6 +2,8 @@
 
 using Cake.Core.Diagnostics;
 
+using LogLevel = Cake.Core.Diagnostics.LogLevel;
+
 namespace Cake.OctoVariapus.Tests
 {
     public class CakeLogFixture : ICakeLog
@@ -17,7 +19,7 @@ namespace Cake.OctoVariapus.Tests
         {
             Messages.Add(new MessageWrapper(verbosity, level, format, args));
         }
-
+       
         public Verbosity Verbosity { get; set; }
     }
 
