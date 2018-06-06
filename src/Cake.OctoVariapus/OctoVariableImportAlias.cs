@@ -32,11 +32,11 @@ namespace Cake.OctoVariapus
         /// <param name="clearAllNonSensitiveExistingVariables">Clear all nonsensitive variables before adding variables.</param>
         [CakeMethodAlias]
         public static void OctoImportVariables(this ICakeContext context,
-            string octopusServerEndpoint,
-            string octopusProjectName,
-            string octopusApiKey,
-            IEnumerable<OctoVariable> variables,
-            bool clearAllNonSensitiveExistingVariables = false)
+                                               string octopusServerEndpoint,
+                                               string octopusProjectName,
+                                               string octopusApiKey,
+                                               IEnumerable<OctoVariable> variables,
+                                               bool clearAllNonSensitiveExistingVariables = false)
         {
             try
             {
@@ -49,28 +49,20 @@ namespace Cake.OctoVariapus
 
                 if (clearAllNonSensitiveExistingVariables)
                 {
-                    context.Log.Information($"Deleting all nonsensitive variables...");
-
-                    List<VariableResource> sensitiveVariables = variableSet.Variables.Where(variable => variable.IsSensitive).ToList();
-
-                    variableSet.Variables.Clear();
-
-                    sensitiveVariables.ForEach(sensitiveVariable => { variableSet.Variables.Add(sensitiveVariable); });
-
-                    context.Log.Information($"Deleting operation finished.");
+                    ClearAllNonSensitiveExistingVariables(context, variableSet);
                 }
 
                 foreach (OctoVariable variable in variables)
                 {
                     var newVariable = new VariableResource
-                    {
-                        Name = variable.Name,
-                        Value = variable.Value,
-                        IsSensitive = variable.IsSensitive,
-                        Type = variable.IsSensitive ? VariableType.Sensitive : VariableType.String,
-                        IsEditable = variable.IsEditable,
-                        Scope = CreateScopeSpesification(variable, variableSet)
-                    };
+                                      {
+                                          Name = variable.Name,
+                                          Value = variable.Value,
+                                          IsSensitive = variable.IsSensitive,
+                                          Type = variable.IsSensitive ? VariableType.Sensitive : VariableType.String,
+                                          IsEditable = variable.IsEditable,
+                                          Scope = CreateScopeSpesification(variable, variableSet)
+                                      };
 
                     string scopeNames = CreateScopeInformationsForLogging(variable);
 
@@ -104,6 +96,19 @@ namespace Cake.OctoVariapus
             }
         }
 
+        private static void ClearAllNonSensitiveExistingVariables(ICakeContext context, VariableSetResource variableSet)
+        {
+            context.Log.Information($"Deleting all nonsensitive variables...");
+
+            List<VariableResource> sensitiveVariables = variableSet.Variables.Where(variable => variable.IsSensitive).ToList();
+
+            variableSet.Variables.Clear();
+
+            sensitiveVariables.ForEach(sensitiveVariable => variableSet.Variables.Add(sensitiveVariable));
+
+            context.Log.Information($"Deleting operation finished.");
+        }
+
         private static string CreateScopeInformationsForLogging(OctoVariable variable)
         {
             List<string> scopeInformation = variable.Scopes
@@ -125,11 +130,11 @@ namespace Cake.OctoVariapus
         /// <param name="clearAllNonSensitiveExistingVariables"></param>
         [CakeMethodAlias]
         public static void OctoImportVariables(this ICakeContext context,
-            string octopusServerEndpoint,
-            string octopusProjectName,
-            string octopusApiKey,
-            FilePath jsonVariableFilePath,
-            bool clearAllNonSensitiveExistingVariables = false)
+                                               string octopusServerEndpoint,
+                                               string octopusProjectName,
+                                               string octopusApiKey,
+                                               FilePath jsonVariableFilePath,
+                                               bool clearAllNonSensitiveExistingVariables = false)
         {
             string jsonString = File.ReadAllText(jsonVariableFilePath.FullPath);
             var variables = JsonConvert.DeserializeObject<List<OctoVariable>>(jsonString);
@@ -142,23 +147,26 @@ namespace Cake.OctoVariapus
             var scopeSpecifiaciton = new ScopeSpecification();
 
             variable.Scopes.ForEach(scope =>
-            {
-                ScopeField scopeName = FindScopeName(scope);
+                                    {
+                                        ScopeField scopeName = FindScopeName(scope);
 
-                List<ReferenceDataItem> referenceDataItems = FindScopeValue(scopeName, variableSet);
+                                        List<ReferenceDataItem> referenceDataItems = FindScopeValue(scopeName, variableSet);
 
-                List<string> scopeValues = referenceDataItems.Join(scope.Values,
-                    refDataItem => refDataItem.Name,
-                    selectedScope => selectedScope,
-                    (item, s) => item.Id)
-                                                             .ToList();
+                                        List<string> scopeValues = referenceDataItems.Join(scope.Values,
+                                                                                           refDataItem => refDataItem.Name,
+                                                                                           selectedScope => selectedScope,
+                                                                                           (item, s) => item.Id)
+                                                                                     .ToList();
 
-                if (!scopeValues.Any()) throw new CakeException($"({string.Join(",", scope.Values)}) value(s) can not be found on ({scope.Name}) scope.");
+                                        if (!scopeValues.Any())
+                                        {
+                                            throw new CakeException($"({string.Join(",", scope.Values)}) value(s) can not be found on ({scope.Name}) scope.");
+                                        }
 
-                var value = new ScopeValue(scopeValues.First(), scopeValues.Skip(1).ToArray());
+                                        var value = new ScopeValue(scopeValues.First(), scopeValues.Skip(1).ToArray());
 
-                scopeSpecifiaciton.Add(scopeName, value);
-            });
+                                        scopeSpecifiaciton.Add(scopeName, value);
+                                    });
 
             return scopeSpecifiaciton;
         }
